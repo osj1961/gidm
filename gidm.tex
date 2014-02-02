@@ -1,0 +1,177 @@
+\ifx\pdfoutput\undefined % We're running regular LaTeX (not pdftex)
+\documentclass[dvips,12pt,twoside]{book}
+\RequirePackage[plainpages=false]{hyperref}
+\usepackage{color}
+\typeout{Use 'fig4latex -l' then 'make' to format graphics for regular latex}
+\else % We're running PdfTeX
+\documentclass[pdftex,12pt,twoside]{book}
+%\usepackage{thumbpdf}
+\RequirePackage[pdftex]{hyperref}
+\hypersetup{colorlinks=true, %
+  plainpages=false, %
+  pdfpagelabels, %
+  %hyperindex=true, %
+  %backref=true, %
+  %bookmarks=true, %
+  pdftitle={A Gentle Introduction to Discrete Mathematics, version 1.0}, %
+  pdfauthor={Joseph E. Fields}, %
+  pdfsubject={Discrete Mathematics, Combinatorics, Graph Theory, Discrete Geometry}, %
+  %pdfpagelayout=SinglePage, %
+  %pdfpagetransition=Dissolve, %
+  pdfstartview=FitH, %
+  %pdfstartpage=1, %
+  %pdffitwindow=true
+}
+\pdfcompresslevel=9
+\typeout{Use 'fig4latex -p' then 'make' to format graphics for pdflatex.}
+
+\fi
+
+\usepackage[english]{babel} %language selection
+\selectlanguage{english}
+
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{color}
+
+\usepackage{ifthen}
+
+%These booleans allow us to generate 3 different books from the same LaTeX source
+
+\newboolean{InTextBook}
+\setboolean{InTextBook}{true}
+\newboolean{InWorkBook}
+\setboolean{InWorkBook}{false}
+\newboolean{InHints}
+\setboolean{InHints}{false}
+
+
+%This command puts different amounts of space depending on whether we are
+% in the text, the workbook or the hints & solutions manual. 
+\newcommand{\twsvspace}[3]{%
+ \ifthenelse{\boolean{InTextBook} }{\vspace{#1}}{%
+  \ifthenelse{\boolean{InWorkBook} }{\vspace{#2}}{%
+   \ifthenelse{\boolean{InHints} }{\vspace{#3}}{} %
+   }%
+  }%
+ }
+
+\newcommand{\wbvfill}{\ifthenelse{\boolean{InWorkBook}}{\vfill}{}}
+\newcommand{\textbookpagebreak}{\ifthenelse{\boolean{InTextBook}}{\newpage}{}}
+\newcommand{\workbookpagebreak}{\ifthenelse{\boolean{InWorkBook}}{\newpage}{}}
+\newcommand{\hintspagebreak}{\ifthenelse{\boolean{InHints}}{\newpage}{}}
+
+\newcommand{\hint}[1]{\ifthenelse{\boolean{InHints}}{{ \color[rgb]{0,0,1} #1} }{}}
+
+%All my customized LaTeX commands are in this file:
+
+\input{my_latex_definitions.tex}
+
+%Things that effect the size and placement of text on the page
+
+\renewcommand{\baselinestretch}{1.3}
+\renewcommand{\arraystretch}{.77}
+
+\addtolength{\textheight}{.25in}
+\addtolength{\oddsidemargin}{.75in}
+\addtolength{\evensidemargin}{-.75in}
+
+\makeindex
+
+\begin{document}
+
+\frontmatter
+
+\title{A Gentle Introduction to Discrete Mathematics\\ {\small Version 1.0}}
+\author{Joe Fields}
+\date{Southern Connecticut State University}
+
+\maketitle
+
+\clearpage
+
+\rule{0pt}{0pt}
+
+\vfill
+
+\begin{quote}
+    Copyright \copyright{}  2014  Joseph E. Fields.
+    Permission is granted to copy, distribute and/or modify this document
+    under the terms of the GNU Free Documentation License, Version 1.3
+    or any later version published by the Free Software Foundation;
+    with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+    A copy of the license is available at the GIDM website in the section 
+    entitled ``GNU Free Documentation License''.
+\end{quote}
+
+\vfill
+
+\begin{quote}
+The latest version of this book is available (without charge) in portable document format at \newline
+\rule{0pt}{0pt} \hspace{1in} \verb+http://www.southernct.edu/~fields/+
+\end{quote}
+
+\vfill
+
+\clearpage
+
+\rule{0pt}{0pt}
+
+\vfill
+
+\begin{quote}
+{\Large \bf Acknowledgments} 
+
+   This is version 1.0 of {\em A Gentle Introduction to Discrete Mathematics}.
+  
+\end{quote}
+
+\vfill
+
+\clearpage
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+\input{pref}
+\input{pref}
+
+\mainmatter
+\part{Introduction}
+\include{intro/intro}
+\include{intro/pbl}
+\part{Counting}
+\include{combi/basic}
+\include{combi/recursion}
+\include{combi/gen_funcs}
+\part{Graphs}
+\include{graphs/intro}
+\include{graphs/coloring}
+\include{graphs/pebbling}
+\part{Geometry}
+\include{geo/finite_fields}
+\include{geo/affine}
+\include{geo/projective}
+\include{geo/eccs}
+\include{geo/designs}
+
+\bibliographystyle{plain}
+\bibliography{main}
+\addcontentsline{toc}{chapter}{References}
+\phantomsection
+\markboth{REFERENCES}{REFERENCES}%
+
+\addcontentsline{toc}{chapter}{Index} 
+\phantomsection
+\markboth{INDEX}{INDEX}
+\printindex
+
+\end{document}
+
